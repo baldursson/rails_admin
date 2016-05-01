@@ -967,6 +967,33 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
   end
 
+  describe 'summernote Support' do
+    it 'adds Javascript to enable Summernote' do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes, :summernote
+        end
+      end
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="summernote"]')
+    end
+
+    it 'should include custom Summernote configuration' do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes, :summernote do
+            config_options placeholder: 'Write here...'
+            css_location 'stub_css.css'
+            js_location 'stub_js.js'
+          end
+        end
+      end
+
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector("textarea#draft_notes[data-richtext=\"summernote\"][data-options]")
+    end
+  end
+
   describe 'Paperclip Support' do
     it 'shows a file upload field' do
       RailsAdmin.config User do

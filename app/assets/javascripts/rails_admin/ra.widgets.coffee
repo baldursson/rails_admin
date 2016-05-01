@@ -306,3 +306,22 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           goFroalaWysiwygs(array)
       else
         goFroalaWysiwygs(array)
+
+    # summernote
+
+    goSummernotes = (array, config_options) =>
+      array.each ->
+        $(@).addClass('summernoted')
+        $(@).summernote(config_options)
+
+    array = content.find('[data-richtext=summernote]').not('.summernoted')
+    if array.length
+      @array = array
+      options = $(array[0]).data('options')
+      config_options = $.parseJSON(options['config_options'])
+      if not window.summernote
+        $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          goSummernotes(@array, config_options)
+      else
+        goSummernotes(@array, config_options)

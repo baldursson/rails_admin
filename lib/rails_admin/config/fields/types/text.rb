@@ -26,6 +26,12 @@ module RailsAdmin
             end
           end
 
+          [:summernote, :summernote_config_options, :summernote_css_location, :summernote_js_location].each do |key|
+            register_deprecated_instance_option key do
+              fail("The 'field(:foo){ summernote true }' style DSL is deprecated. Please use 'field :foo, :summernote' instead.")
+            end
+          end
+
           register_instance_option :html_attributes do
             {
               required: required?,
